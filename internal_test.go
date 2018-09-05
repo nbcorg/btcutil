@@ -13,8 +13,8 @@ package btcutil
 
 import (
 	"github.com/btcsuite/btcd/btcec"
-	"github.com/btcsuite/btcutil/base58"
-	"github.com/btcsuite/btcutil/bech32"
+	"github.com/jakm/btcutil/base58"
+	"github.com/jakm/btcutil/bech32"
 	"golang.org/x/crypto/ripemd160"
 )
 
@@ -34,7 +34,7 @@ func TstAppDataDir(goos, appName string, roaming bool) string {
 // TstAddressPubKeyHash makes an AddressPubKeyHash, setting the
 // unexported fields with the parameters hash and netID.
 func TstAddressPubKeyHash(hash [ripemd160.Size]byte,
-	netID byte) *AddressPubKeyHash {
+	netID []byte) *AddressPubKeyHash {
 
 	return &AddressPubKeyHash{
 		hash:  hash,
@@ -45,7 +45,7 @@ func TstAddressPubKeyHash(hash [ripemd160.Size]byte,
 // TstAddressScriptHash makes an AddressScriptHash, setting the
 // unexported fields with the parameters hash and netID.
 func TstAddressScriptHash(hash [ripemd160.Size]byte,
-	netID byte) *AddressScriptHash {
+	netID []byte) *AddressScriptHash {
 
 	return &AddressScriptHash{
 		hash:  hash,
@@ -80,7 +80,7 @@ func TstAddressWitnessScriptHash(version byte, program [32]byte,
 // TstAddressPubKey makes an AddressPubKey, setting the unexported fields with
 // the parameters.
 func TstAddressPubKey(serializedPubKey []byte, pubKeyFormat PubKeyFormat,
-	netID byte) *AddressPubKey {
+	netID []byte) *AddressPubKey {
 
 	pubKey, _ := btcec.ParsePubKey(serializedPubKey, btcec.S256())
 	return &AddressPubKey{

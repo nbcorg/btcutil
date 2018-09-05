@@ -7,7 +7,7 @@ package base58_test
 import (
 	"fmt"
 
-	"github.com/btcsuite/btcutil/base58"
+	"github.com/jakm/btcutil/base58"
 )
 
 // This example demonstrates how to decode modified base58 encoded data.
@@ -41,7 +41,7 @@ func ExampleEncode() {
 func ExampleCheckDecode() {
 	// Decode an example Base58Check encoded data.
 	encoded := "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa"
-	decoded, version, err := base58.CheckDecode(encoded)
+	decoded, version, err := base58.CheckDecode(encoded, 1)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -53,7 +53,7 @@ func ExampleCheckDecode() {
 
 	// Output:
 	// Decoded data: 62e907b15cbf27d5425399ebf6f0fb50ebb88f18
-	// Version Byte: 0
+	// Version Byte: [0]
 }
 
 // This example demonstrates how to encode data using the Base58Check encoding
@@ -61,7 +61,7 @@ func ExampleCheckDecode() {
 func ExampleCheckEncode() {
 	// Encode example data with the Base58Check encoding scheme.
 	data := []byte("Test data")
-	encoded := base58.CheckEncode(data, 0)
+	encoded := base58.CheckEncode(data, []byte{0})
 
 	// Show the encoded data.
 	fmt.Println("Encoded Data:", encoded)
