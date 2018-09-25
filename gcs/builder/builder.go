@@ -11,9 +11,9 @@ import (
 	"math"
 
 	"github.com/btcsuite/btcd/chaincfg/chainhash"
-	"github.com/btcsuite/btcd/txscript"
 	"github.com/btcsuite/btcd/wire"
 	"github.com/jakm/btcutil/gcs"
+	"github.com/jakm/btcutil/txscript"
 )
 
 const (
