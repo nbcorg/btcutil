@@ -631,6 +631,14 @@ func mustRegister(params *Params) {
 	}
 }
 
+// IsRegistered returns whether network parameters are registered
+func IsRegistered(params *Params) bool {
+	if _, ok := registeredNets[params.Net]; ok {
+		return true
+	}
+	return false
+}
+
 // ResetParams reset network parameters registers
 func ResetParams() {
 	registeredNets = make(map[wire.BitcoinNet]struct{})
