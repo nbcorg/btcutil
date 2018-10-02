@@ -20,6 +20,9 @@ import (
 // It also prints the created script hex and uses the DisasmString function to
 // display the disassembled script.
 func ExamplePayToAddrScript() {
+	chaincfg.RegisterBitcoinParams()
+	defer chaincfg.ResetParams()
+
 	// Parse the address to send the coins to into a btcutil.Address
 	// which is useful to ensure the accuracy of the address and determine
 	// the address type.  It is also required for the upcoming call to

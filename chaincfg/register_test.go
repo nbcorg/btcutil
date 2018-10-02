@@ -23,6 +23,9 @@ var mockNetParams = Params{
 }
 
 func TestRegister(t *testing.T) {
+	RegisterBitcoinParams()
+	defer ResetParams()
+
 	type registerTest struct {
 		name   string
 		params *Params

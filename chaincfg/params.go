@@ -587,11 +587,11 @@ var (
 )
 
 var (
-	registeredNets       = make(map[wire.BitcoinNet]struct{})
-	pubKeyHashAddrIDs    = make(map[string]struct{})
-	scriptHashAddrIDs    = make(map[string]struct{})
-	bech32SegwitPrefixes = make(map[string]struct{})
-	hdPrivToPubKeyIDs    = make(map[[4]byte][]byte)
+	registeredNets       map[wire.BitcoinNet]struct{}
+	pubKeyHashAddrIDs    map[string]struct{}
+	scriptHashAddrIDs    map[string]struct{}
+	bech32SegwitPrefixes map[string]struct{}
+	hdPrivToPubKeyIDs    map[[4]byte][]byte
 )
 
 // String returns the hostname of the DNS seed in human-readable form.
@@ -624,11 +624,28 @@ func Register(params *Params) error {
 }
 
 // mustRegister performs the same function as Register except it panics if there
-// is an error.  This should only be called from package init functions.
+// is an error.
 func mustRegister(params *Params) {
 	if err := Register(params); err != nil {
 		panic("failed to register network: " + err.Error())
 	}
+}
+
+// ResetParams reset network parameters registers
+func ResetParams() {
+	registeredNets = make(map[wire.BitcoinNet]struct{})
+	pubKeyHashAddrIDs = make(map[string]struct{})
+	scriptHashAddrIDs = make(map[string]struct{})
+	bech32SegwitPrefixes = make(map[string]struct{})
+	hdPrivToPubKeyIDs = make(map[[4]byte][]byte)
+}
+
+// RegisterBitcoinParams registers network parameters for a Bitcoin network.
+func RegisterBitcoinParams() {
+	mustRegister(&MainNetParams)
+	mustRegister(&TestNet3Params)
+	mustRegister(&RegressionNetParams)
+	mustRegister(&SimNetParams)
 }
 
 // IsPubKeyHashAddrID returns whether the id is an identifier known to prefix a
@@ -700,9 +717,5 @@ func newHashFromStr(hexStr string) *chainhash.Hash {
 }
 
 func init() {
-	// Register all default networks when the package is initialized.
-	mustRegister(&MainNetParams)
-	mustRegister(&TestNet3Params)
-	mustRegister(&RegressionNetParams)
-	mustRegister(&SimNetParams)
+	ResetParams()
 }

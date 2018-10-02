@@ -138,6 +138,9 @@ func Example_defaultWalletLayout() {
 
 // This example demonstrates the audits use case in BIP0032.
 func Example_audits() {
+	chaincfg.RegisterBitcoinParams()
+	defer chaincfg.ResetParams()
+
 	// The audits use case described in BIP0032 is:
 	//
 	// In case an auditor needs full access to the list of incoming and

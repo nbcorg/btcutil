@@ -22,6 +22,9 @@ import (
 // TestBIP0032Vectors tests the vectors provided by [BIP32] to ensure the
 // derivation works as intended.
 func TestBIP0032Vectors(t *testing.T) {
+	chaincfg.RegisterBitcoinParams()
+	defer chaincfg.ResetParams()
+
 	// The master seeds for each of the two test vectors in [BIP32].
 	testVec1MasterHex := "000102030405060708090a0b0c0d0e0f"
 	testVec2MasterHex := "fffcf9f6f3f0edeae7e4e1dedbd8d5d2cfccc9c6c3c0bdbab7b4b1aeaba8a5a29f9c999693908d8a8784817e7b7875726f6c696663605d5a5754514e4b484542"
@@ -665,6 +668,9 @@ func TestExtendedKeyAPI(t *testing.T) {
 
 // TestNet ensures the network related APIs work as intended.
 func TestNet(t *testing.T) {
+	chaincfg.RegisterBitcoinParams()
+	defer chaincfg.ResetParams()
+
 	tests := []struct {
 		name      string
 		key       string
@@ -800,6 +806,9 @@ func TestNet(t *testing.T) {
 // TestErrors performs some negative tests for various invalid cases to ensure
 // the errors are handled properly.
 func TestErrors(t *testing.T) {
+	chaincfg.RegisterBitcoinParams()
+	defer chaincfg.ResetParams()
+
 	// Should get an error when seed has too few bytes.
 	net := &chaincfg.MainNetParams
 	_, err := NewMaster(bytes.Repeat([]byte{0x00}, 15), net)
@@ -891,6 +900,9 @@ func TestErrors(t *testing.T) {
 
 // TestZero ensures that zeroing an extended key works as intended.
 func TestZero(t *testing.T) {
+	chaincfg.RegisterBitcoinParams()
+	defer chaincfg.ResetParams()
+
 	tests := []struct {
 		name   string
 		master string

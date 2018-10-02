@@ -11,6 +11,7 @@ import (
 
 	"github.com/btcsuite/btcd/wire"
 	"github.com/davecgh/go-spew/spew"
+	"github.com/jakm/btcutil/chaincfg"
 )
 
 // genTestTx creates a random transaction for uses within test cases.
@@ -54,6 +55,9 @@ func genTestTx() (*wire.MsgTx, error) {
 // inserted.  Conversely, ContainsHashes should return false for any items
 // _not_ in the hash cache.
 func TestHashCacheAddContainsHashes(t *testing.T) {
+	chaincfg.RegisterBitcoinParams()
+	defer chaincfg.ResetParams()
+
 	t.Parallel()
 
 	rand.Seed(time.Now().Unix())

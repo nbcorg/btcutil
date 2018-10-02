@@ -18,6 +18,9 @@ import (
 )
 
 func TestAddresses(t *testing.T) {
+	chaincfg.RegisterBitcoinParams()
+	defer chaincfg.ResetParams()
+
 	tests := []struct {
 		name    string
 		addr    string

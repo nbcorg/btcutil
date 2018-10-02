@@ -67,6 +67,9 @@ var (
 
 // TestUseBlockHash tests using a block hash as a filter key.
 func TestUseBlockHash(t *testing.T) {
+	chaincfg.RegisterBitcoinParams()
+	defer chaincfg.ResetParams()
+
 	// Block hash #448710, pretty high difficulty.
 	hash, err := chainhash.NewHashFromStr(testHash)
 	if err != nil {
