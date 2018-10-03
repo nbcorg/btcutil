@@ -12,9 +12,9 @@ import (
 	"strings"
 
 	"github.com/btcsuite/btcd/btcec"
-	"github.com/jakm/btcutil/chaincfg"
 	"github.com/jakm/btcutil/base58"
 	"github.com/jakm/btcutil/bech32"
+	"github.com/jakm/btcutil/chaincfg"
 	"golang.org/x/crypto/ripemd160"
 )
 
@@ -431,7 +431,7 @@ func NewAddressPubKey(serializedPubKey []byte, net *chaincfg.Params) (*AddressPu
 		pubKey:       pubKey,
 	}
 	addr.pubKeyHashID = make([]byte, len(net.PubKeyHashAddrID))
-	copy(addr.pubKeyHashID, addr.pubKeyHashID)
+	copy(addr.pubKeyHashID, net.PubKeyHashAddrID)
 
 	return addr, nil
 }
