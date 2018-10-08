@@ -41,7 +41,7 @@ func ExampleEncode() {
 func ExampleCheckDecode() {
 	// Decode an example Base58Check encoded data.
 	encoded := "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa"
-	decoded, version, err := base58.CheckDecode(encoded, 1)
+	decoded, version, err := base58.CheckDecode(encoded, 1, base58.Sha256D)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -61,7 +61,7 @@ func ExampleCheckDecode() {
 func ExampleCheckEncode() {
 	// Encode example data with the Base58Check encoding scheme.
 	data := []byte("Test data")
-	encoded := base58.CheckEncode(data, []byte{0})
+	encoded := base58.CheckEncode(data, []byte{0}, base58.Sha256D)
 
 	// Show the encoded data.
 	fmt.Println("Encoded Data:", encoded)
