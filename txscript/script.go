@@ -12,6 +12,7 @@ import (
 
 	"github.com/btcsuite/btcd/chaincfg/chainhash"
 	"github.com/btcsuite/btcd/wire"
+	"github.com/jakm/btcutil"
 )
 
 // Bip16Activation is the timestamp where BIP0016 is valid to use in the
@@ -857,4 +858,23 @@ func IsUnspendable(pkScript []byte) bool {
 	}
 
 	return len(pops) > 0 && pops[0].opcode.value == OP_RETURN
+}
+
+// ConvertP2PKtoP2PKH converts pay to public key script to pay to public key hash script
+// Some applications (e.g. Blockbook) are using output scripts to index addresses
+// As P2PK and P2PKH have equal addresses, the P2PK script must be converted to P2PKH
+// so that the application finds all transactions made by given private key
+// if the script is not P2PK, it is returned unchanged
+func ConvertP2PKtoP2PKH(script []byte) ([]byte, error) {
+	// len of P2PK is 35 or 67 bytes
+	// compressed P2PK  - 0x21 PK len, 33 bytes PK, 0xac OP_CHECKSIG
+	// uncompressed/hybrid P2PK - PK 0x41 len, 65 bytes PK, 0xac OP_CHECKSIG
+	l := len(script)
+	if l == 35 || l == 67 {
+		if script[l-1] == OP_CHECKSIG && (script[0] == 0x21 || script[0] == 0x41) {
+			// compute hash from the public key in the input format
+			return payToPubKeyHashScript(btcutil.Hash160(script[1 : l-1]))
+		}
+	}
+	return script, nil
 }
