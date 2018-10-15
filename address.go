@@ -297,7 +297,7 @@ func (a *AddressPubKeyHash) ScriptAddress() []byte {
 // IsForNet returns whether or not the pay-to-pubkey-hash address is associated
 // with the passed bitcoin network.
 func (a *AddressPubKeyHash) IsForNet(net *chaincfg.Params) bool {
-	return bytes.Equal(a.netID, net.PubKeyHashAddrID) && a.cksumHasher == net.Base58CksumHasher
+	return bytes.Equal(a.netID, net.PubKeyHashAddrID)
 }
 
 // String returns a human-readable string for the pay-to-pubkey-hash address.
@@ -368,7 +368,7 @@ func (a *AddressScriptHash) ScriptAddress() []byte {
 // IsForNet returns whether or not the pay-to-script-hash address is associated
 // with the passed bitcoin network.
 func (a *AddressScriptHash) IsForNet(net *chaincfg.Params) bool {
-	return bytes.Equal(a.netID, net.ScriptHashAddrID) && a.cksumHasher == net.Base58CksumHasher
+	return bytes.Equal(a.netID, net.ScriptHashAddrID)
 }
 
 // String returns a human-readable string for the pay-to-script-hash address.
@@ -481,7 +481,7 @@ func (a *AddressPubKey) ScriptAddress() []byte {
 // IsForNet returns whether or not the pay-to-pubkey address is associated
 // with the passed bitcoin network.
 func (a *AddressPubKey) IsForNet(net *chaincfg.Params) bool {
-	return bytes.Equal(a.pubKeyHashID, net.PubKeyHashAddrID) && a.cksumHasher == net.Base58CksumHasher
+	return bytes.Equal(a.pubKeyHashID, net.PubKeyHashAddrID)
 }
 
 // String returns the hex-encoded human-readable string for the pay-to-pubkey
