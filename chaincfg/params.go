@@ -13,6 +13,7 @@ import (
 
 	"github.com/btcsuite/btcd/chaincfg/chainhash"
 	"github.com/btcsuite/btcd/wire"
+	"github.com/jakm/btcutil/base58"
 )
 
 // These variables are the chain proof-of-work limit parameters for each default
@@ -214,6 +215,8 @@ type Params struct {
 	WitnessPubKeyHashAddrID []byte // First n bytes of a P2WPKH address
 	WitnessScriptHashAddrID []byte // First n bytes of a P2WSH address
 
+	Base58CksumHasher base58.CksumHasher // Hash used for address checksum
+
 	// BIP32 hierarchical deterministic extended key magics
 	HDPrivateKeyID [4]byte
 	HDPublicKeyID  [4]byte
@@ -314,6 +317,7 @@ var MainNetParams = Params{
 	PrivateKeyID:            []byte{0x80}, // starts with 5 (uncompressed) or K (compressed)
 	WitnessPubKeyHashAddrID: []byte{0x06}, // starts with p2
 	WitnessScriptHashAddrID: []byte{0x0A}, // starts with 7Xh
+	Base58CksumHasher:       base58.Sha256D,
 
 	// BIP32 hierarchical deterministic extended key magics
 	HDPrivateKeyID: [4]byte{0x04, 0x88, 0xad, 0xe4}, // starts with xprv
@@ -385,10 +389,11 @@ var RegressionNetParams = Params{
 	Bech32HRPSegwit: "bcrt", // always bcrt for reg test net
 
 	// Address encoding magics
-	AddressMagicLen:  1,
-	PubKeyHashAddrID: []byte{0x6f}, // starts with m or n
-	ScriptHashAddrID: []byte{0xc4}, // starts with 2
-	PrivateKeyID:     []byte{0xef}, // starts with 9 (uncompressed) or c (compressed)
+	AddressMagicLen:   1,
+	PubKeyHashAddrID:  []byte{0x6f}, // starts with m or n
+	ScriptHashAddrID:  []byte{0xc4}, // starts with 2
+	PrivateKeyID:      []byte{0xef}, // starts with 9 (uncompressed) or c (compressed)
+	Base58CksumHasher: base58.Sha256D,
 
 	// BIP32 hierarchical deterministic extended key magics
 	HDPrivateKeyID: [4]byte{0x04, 0x35, 0x83, 0x94}, // starts with tprv
@@ -483,6 +488,7 @@ var TestNet3Params = Params{
 	WitnessPubKeyHashAddrID: []byte{0x03}, // starts with QW
 	WitnessScriptHashAddrID: []byte{0x28}, // starts with T7n
 	PrivateKeyID:            []byte{0xef}, // starts with 9 (uncompressed) or c (compressed)
+	Base58CksumHasher:       base58.Sha256D,
 
 	// BIP32 hierarchical deterministic extended key magics
 	HDPrivateKeyID: [4]byte{0x04, 0x35, 0x83, 0x94}, // starts with tprv
@@ -564,6 +570,7 @@ var SimNetParams = Params{
 	PrivateKeyID:            []byte{0x64}, // starts with 4 (uncompressed) or F (compressed)
 	WitnessPubKeyHashAddrID: []byte{0x19}, // starts with Gg
 	WitnessScriptHashAddrID: []byte{0x28}, // starts with ?
+	Base58CksumHasher:       base58.Sha256D,
 
 	// BIP32 hierarchical deterministic extended key magics
 	HDPrivateKeyID: [4]byte{0x04, 0x20, 0xb9, 0x00}, // starts with sprv

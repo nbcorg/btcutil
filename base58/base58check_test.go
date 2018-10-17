@@ -13,31 +13,35 @@ import (
 
 var checkEncodingStringTests = []struct {
 	version []byte
+	hasher  base58.CksumHasher
 	in      string
 	out     string
 }{
-	{[]byte{20}, "", "3MNQE1X"},
-	{[]byte{20}, " ", "B2Kr6dBE"},
-	{[]byte{20}, "-", "B3jv1Aft"},
-	{[]byte{20}, "0", "B482yuaX"},
-	{[]byte{20}, "1", "B4CmeGAC"},
-	{[]byte{20}, "-1", "mM7eUf6kB"},
-	{[]byte{20}, "11", "mP7BMTDVH"},
-	{[]byte{20}, "abc", "4QiVtDjUdeq"},
-	{[]byte{20}, "1234598760", "ZmNb8uQn5zvnUohNCEPP"},
-	{[]byte{20}, "abcdefghijklmnopqrstuvwxyz", "K2RYDcKfupxwXdWhSAxQPCeiULntKm63UXyx5MvEH2"},
-	{[]byte{20}, "00000000000000000000000000000000000000000000000000000000000000", "bi1EWXwJay2udZVxLJozuTb8Meg4W9c6xnmJaRDjg6pri5MBAxb9XwrpQXbtnqEoRV5U2pixnFfwyXC8tRAVC8XxnjK"},
+	{[]byte{20}, base58.Sha256D, "", "3MNQE1X"},
+	{[]byte{20}, base58.Groestl512D, "", "3MMSnZL"},
+	{[]byte{20}, base58.Sha256D, " ", "B2Kr6dBE"},
+	{[]byte{20}, base58.Sha256D, "-", "B3jv1Aft"},
+	{[]byte{20}, base58.Sha256D, "0", "B482yuaX"},
+	{[]byte{20}, base58.Sha256D, "1", "B4CmeGAC"},
+	{[]byte{20}, base58.Sha256D, "-1", "mM7eUf6kB"},
+	{[]byte{20}, base58.Sha256D, "11", "mP7BMTDVH"},
+	{[]byte{20}, base58.Sha256D, "abc", "4QiVtDjUdeq"},
+	{[]byte{20}, base58.Sha256D, "1234598760", "ZmNb8uQn5zvnUohNCEPP"},
+	{[]byte{20}, base58.Groestl512D, "1234598760", "ZmNb8uQn5zvnUoisWKK7"},
+	{[]byte{20}, base58.Sha256D, "abcdefghijklmnopqrstuvwxyz", "K2RYDcKfupxwXdWhSAxQPCeiULntKm63UXyx5MvEH2"},
+	{[]byte{20}, base58.Groestl512D, "abcdefghijklmnopqrstuvwxyz", "K2RYDcKfupxwXdWhSAxQPCeiULntKm63UXyx2rTuoo"},
+	{[]byte{20}, base58.Sha256D, "00000000000000000000000000000000000000000000000000000000000000", "bi1EWXwJay2udZVxLJozuTb8Meg4W9c6xnmJaRDjg6pri5MBAxb9XwrpQXbtnqEoRV5U2pixnFfwyXC8tRAVC8XxnjK"},
 }
 
 func TestBase58Check(t *testing.T) {
 	for x, test := range checkEncodingStringTests {
 		// test encoding
-		if res := base58.CheckEncode([]byte(test.in), test.version); res != test.out {
+		if res := base58.CheckEncode([]byte(test.in), test.version, test.hasher); res != test.out {
 			t.Errorf("CheckEncode test #%d failed: got %s, want: %s", x, res, test.out)
 		}
 
 		// test decoding
-		res, version, err := base58.CheckDecode(test.out, 1)
+		res, version, err := base58.CheckDecode(test.out, 1, test.hasher)
 		if err != nil {
 			t.Errorf("CheckDecode test #%d failed with err: %v", x, err)
 		} else if !bytes.Equal(version, test.version) {
@@ -47,18 +51,23 @@ func TestBase58Check(t *testing.T) {
 		}
 	}
 
-	// test the two decoding failure cases
+	// test the few decoding failure cases
 	// case 1: checksum error
-	_, _, err := base58.CheckDecode("3MNQE1Y", 1)
+	_, _, err := base58.CheckDecode("3MNQE1Y", 1, base58.Sha256D)
 	if err != base58.ErrChecksum {
 		t.Error("Checkdecode test failed, expected ErrChecksum")
 	}
-	// case 2: invalid formats (string lengths below 5 mean the version byte and/or the checksum
+	// case 2: checksum error (valid SHA256 checksum), but we use Groestl hash
+	_, _, err = base58.CheckDecode("3MNQE1X", 1, base58.Groestl512D)
+	if err != base58.ErrChecksum {
+		t.Error("Checkdecode(Groestl512D) test failed, expected ErrChecksum")
+	}
+	// case 3: invalid formats (string lengths below 5 mean the version byte and/or the checksum
 	// bytes are missing).
 	testString := ""
 	for len := 0; len < 4; len++ {
 		// make a string of length `len`
-		_, _, err = base58.CheckDecode(testString, 1)
+		_, _, err = base58.CheckDecode(testString, 1, base58.Sha256D)
 		if err != base58.ErrInvalidFormat {
 			t.Error("Checkdecode test failed, expected ErrInvalidFormat")
 		}
