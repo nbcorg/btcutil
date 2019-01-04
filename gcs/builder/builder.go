@@ -10,10 +10,10 @@ import (
 	"fmt"
 	"math"
 
-	"github.com/btcsuite/btcd/chaincfg/chainhash"
-	"github.com/btcsuite/btcd/wire"
-	"github.com/jakm/btcutil/gcs"
-	"github.com/jakm/btcutil/txscript"
+	"github.com/martinboehm/btcd/chaincfg/chainhash"
+	"github.com/martinboehm/btcd/wire"
+	"github.com/martinboehm/btcutil/gcs"
+	"github.com/martinboehm/btcutil/txscript"
 )
 
 const (

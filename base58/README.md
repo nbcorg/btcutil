@@ -1,9 +1,9 @@
 base58
 ==========
 
-[![Build Status](http://img.shields.io/travis/jakm/btcutil.svg)](https://travis-ci.org/jakm/btcutil)
+[![Build Status](http://img.shields.io/travis/martinboehm/btcutil.svg)](https://travis-ci.org/martinboehm/btcutil)
 [![ISC License](http://img.shields.io/badge/license-ISC-blue.svg)](http://copyfree.org)
-[![GoDoc](https://img.shields.io/badge/godoc-reference-blue.svg)](http://godoc.org/github.com/jakm/btcutil/base58)
+[![GoDoc](https://img.shields.io/badge/godoc-reference-blue.svg)](http://godoc.org/github.com/martinboehm/btcutil/base58)
 
 Package base58 provides an API for encoding and decoding to and from the
 modified base58 encoding.  It also provides an API to do Base58Check encoding,
@@ -14,7 +14,7 @@ A comprehensive suite of tests is provided to ensure proper functionality.
 ## Installation and Updating
 
 ```bash
-$ go get -u github.com/jakm/btcutil/base58
+$ go get -u github.com/martinboehm/btcutil/base58
 ```
 
 ## Examples

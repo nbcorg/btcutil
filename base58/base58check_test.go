@@ -8,7 +8,7 @@ import (
 	"bytes"
 	"testing"
 
-	"github.com/jakm/btcutil/base58"
+	"github.com/martinboehm/btcutil/base58"
 )
 
 var checkEncodingStringTests = []struct {

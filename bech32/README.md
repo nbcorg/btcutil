@@ -1,9 +1,9 @@
 bech32
 ==========
 
-[![Build Status](http://img.shields.io/travis/jakm/btcutil.svg)](https://travis-ci.org/jakm/btcutil)
+[![Build Status](http://img.shields.io/travis/martinboehm/btcutil.svg)](https://travis-ci.org/martinboehm/btcutil)
 [![ISC License](http://img.shields.io/badge/license-ISC-blue.svg)](http://copyfree.org)
-[![GoDoc](https://godoc.org/github.com/jakm/btcutil/bech32?status.png)](http://godoc.org/github.com/jakm/btcutil/bech32)
+[![GoDoc](https://godoc.org/github.com/martinboehm/btcutil/bech32?status.png)](http://godoc.org/github.com/martinboehm/btcutil/bech32)
 
 Package bech32 provides a Go implementation of the bech32 format specified in
 [BIP 173](https://github.com/bitcoin/bips/blob/master/bip-0173.mediawiki).
@@ -13,7 +13,7 @@ Test vectors from BIP 173 are added to ensure compatibility with the BIP.
 ## Installation and Updating
 
 ```bash
-$ go get -u github.com/jakm/btcutil/bech32
+$ go get -u github.com/martinboehm/btcutil/bech32
 ```
 
 ## Examples
