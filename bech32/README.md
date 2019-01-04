@@ -18,9 +18,9 @@ $ go get -u github.com/martinboehm/btcutil/bech32
 
 ## Examples
 
-* [Bech32 decode Example](http://godoc.org/github.com/btcsuite/btcutil/bech32#example-Bech32Decode)
+* [Bech32 decode Example](http://godoc.org/github.com/martinboehm/btcutil/bech32#example-Bech32Decode)
   Demonstrates how to decode a bech32 encoded string.
-* [Bech32 encode Example](http://godoc.org/github.com/btcsuite/btcutil/bech32#example-BechEncode)
+* [Bech32 encode Example](http://godoc.org/github.com/martinboehm/btcutil/bech32#example-BechEncode)
   Demonstrates how to encode data into a bech32 string.
 
 ## License

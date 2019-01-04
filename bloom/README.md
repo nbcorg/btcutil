@@ -20,7 +20,7 @@ $ go get -u github.com/martinboehm/btcutil/bloom
 
 ## Examples
 
-* [NewFilter Example](http://godoc.org/github.com/btcsuite/btcutil/bloom#example-NewFilter)
+* [NewFilter Example](http://godoc.org/github.com/martinboehm/btcutil/bloom#example-NewFilter)
   Demonstrates how to create a new bloom filter, add a transaction hash to it,
   and check if the filter matches the transaction.
 
