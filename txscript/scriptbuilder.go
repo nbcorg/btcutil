@@ -13,9 +13,9 @@ const (
 	// defaultScriptAlloc is the default size used for the backing array
 	// for a script being built by the ScriptBuilder.  The array will
 	// dynamically grow as needed, but this figure is intended to provide
-	// enough space for vast majority of scripts without needing to grow the
-	// backing array multiple times.
-	defaultScriptAlloc = 500
+	// enough space for vast majority of output scripts (i.e. p2pkh, p2sh, p2wpkh, p2wsh)
+	// without needing to grow the backing array multiple times.
+	defaultScriptAlloc = 34
 )
 
 // ErrScriptNotCanonical identifies a non-canonical script.  The caller can use
