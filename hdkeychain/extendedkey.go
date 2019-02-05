@@ -585,3 +585,8 @@ func (k *ExtendedKey) Version() uint32 {
 func (k *ExtendedKey) PubKeyBytes() []byte {
 	return k.pubKeyBytes()
 }
+
+// ChildNum returns child num of the extended key
+func (k *ExtendedKey) ChildNum() uint32 {
+	return k.childNum
+}
