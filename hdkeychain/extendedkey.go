@@ -19,7 +19,6 @@ import (
 	"math/big"
 
 	"github.com/martinboehm/btcd/btcec"
-	"github.com/martinboehm/btcd/chaincfg/chainhash"
 	"github.com/martinboehm/btcutil"
 	"github.com/martinboehm/btcutil/base58"
 	"github.com/martinboehm/btcutil/chaincfg"
@@ -106,14 +105,15 @@ var masterKey = []byte("Bitcoin seed")
 // deterministic extended key.  See the package overview documentation for
 // more details on how to use extended keys.
 type ExtendedKey struct {
-	key       []byte // This will be the pubkey for extended pub keys
-	pubKey    []byte // This will only be set for extended priv keys
-	chainCode []byte
-	depth     uint8
-	parentFP  []byte
-	childNum  uint32
-	version   []byte
-	isPrivate bool
+	key         []byte // This will be the pubkey for extended pub keys
+	pubKey      []byte // This will only be set for extended priv keys
+	chainCode   []byte
+	depth       uint8
+	parentFP    []byte
+	childNum    uint32
+	version     []byte
+	isPrivate   bool
+	cksumHasher base58.CksumHasher
 }
 
 // NewExtendedKey returns a new instance of an extended key with the given
@@ -122,18 +122,19 @@ type ExtendedKey struct {
 // only by used by applications that need to create custom ExtendedKeys. All
 // other applications should just use NewMaster, Child, or Neuter.
 func NewExtendedKey(version, key, chainCode, parentFP []byte, depth uint8,
-	childNum uint32, isPrivate bool) *ExtendedKey {
+	childNum uint32, isPrivate bool, cksumHasher base58.CksumHasher) *ExtendedKey {
 
 	// NOTE: The pubKey field is intentionally left nil so it is only
 	// computed and memoized as required.
 	return &ExtendedKey{
-		key:       key,
-		chainCode: chainCode,
-		depth:     depth,
-		parentFP:  parentFP,
-		childNum:  childNum,
-		version:   version,
-		isPrivate: isPrivate,
+		key:         key,
+		chainCode:   chainCode,
+		depth:       depth,
+		parentFP:    parentFP,
+		childNum:    childNum,
+		version:     version,
+		isPrivate:   isPrivate,
+		cksumHasher: cksumHasher,
 	}
 }
 
@@ -326,7 +327,7 @@ func (k *ExtendedKey) Child(i uint32) (*ExtendedKey, error) {
 	// bytes of the RIPEMD160(SHA256(parentPubKey)).
 	parentFP := btcutil.Hash160(k.pubKeyBytes())[:4]
 	return NewExtendedKey(k.version, childKey, childChainCode, parentFP,
-		k.depth+1, i, isPrivate), nil
+		k.depth+1, i, isPrivate, k.cksumHasher), nil
 }
 
 // Neuter returns a new extended public key from this extended private key.  The
@@ -354,7 +355,7 @@ func (k *ExtendedKey) Neuter() (*ExtendedKey, error) {
 	//
 	// This is the function N((k,c)) -> (K, c) from [BIP32].
 	return NewExtendedKey(version, k.pubKeyBytes(), k.chainCode, k.parentFP,
-		k.depth, k.childNum, false), nil
+		k.depth, k.childNum, false, k.cksumHasher), nil
 }
 
 // ECPubKey converts the extended key to a btcec public key and returns it.
@@ -404,8 +405,8 @@ func (k *ExtendedKey) String() string {
 	// The serialized format is:
 	//   version (4) || depth (1) || parent fingerprint (4)) ||
 	//   child num (4) || chain code (32) || key data (33) || checksum (4)
-	serializedBytes := make([]byte, 0, serializedKeyLen+4)
-	serializedBytes = append(serializedBytes, k.version...)
+	serializedBytes := make([]byte, 0, serializedKeyLen)
+	// version will be added during checksum calculation
 	serializedBytes = append(serializedBytes, k.depth)
 	serializedBytes = append(serializedBytes, k.parentFP...)
 	serializedBytes = append(serializedBytes, childNumBytes[:]...)
@@ -416,10 +417,7 @@ func (k *ExtendedKey) String() string {
 	} else {
 		serializedBytes = append(serializedBytes, k.pubKeyBytes()...)
 	}
-
-	checkSum := chainhash.DoubleHashB(serializedBytes)[:4]
-	serializedBytes = append(serializedBytes, checkSum...)
-	return base58.Encode(serializedBytes)
+	return base58.CheckEncode(serializedBytes, k.version, k.cksumHasher)
 }
 
 // IsForNet returns whether or not the extended key is associated with the
@@ -498,30 +496,26 @@ func NewMaster(seed []byte, net *chaincfg.Params) (*ExtendedKey, error) {
 
 	parentFP := []byte{0x00, 0x00, 0x00, 0x00}
 	return NewExtendedKey(net.HDPrivateKeyID[:], secretKey, chainCode,
-		parentFP, 0, 0, true), nil
+		parentFP, 0, 0, true, net.Base58CksumHasher), nil
 }
 
 // NewKeyFromString returns a new extended key instance from a base58-encoded
 // extended key.
-func NewKeyFromString(key string) (*ExtendedKey, error) {
+func NewKeyFromString(key string, cksumHasher base58.CksumHasher) (*ExtendedKey, error) {
 	// The base58-decoded extended key must consist of a serialized payload
-	// plus an additional 4 bytes for the checksum.
-	decoded := base58.Decode(key)
-	if len(decoded) != serializedKeyLen+4 {
+	// plus an additional 4 bytes for the checksum. We use 0 as version length
+	// because we want it to be part of the payload.
+	payload, _, err := base58.CheckDecode(key, 0, cksumHasher)
+	if err != nil {
+		return nil, ErrBadChecksum
+	}
+	if len(payload) != serializedKeyLen {
 		return nil, ErrInvalidKeyLen
 	}
 
 	// The serialized format is:
 	//   version (4) || depth (1) || parent fingerprint (4)) ||
 	//   child num (4) || chain code (32) || key data (33) || checksum (4)
-
-	// Split the payload and checksum up and ensure the checksum matches.
-	payload := decoded[:len(decoded)-4]
-	checkSum := decoded[len(decoded)-4:]
-	expectedCheckSum := chainhash.DoubleHashB(payload)[:4]
-	if !bytes.Equal(checkSum, expectedCheckSum) {
-		return nil, ErrBadChecksum
-	}
 
 	// Deserialize each of the payload fields.
 	version := payload[:4]
@@ -552,7 +546,7 @@ func NewKeyFromString(key string) (*ExtendedKey, error) {
 	}
 
 	return NewExtendedKey(version, keyData, chainCode, parentFP, depth,
-		childNum, isPrivate), nil
+		childNum, isPrivate, cksumHasher), nil
 }
 
 // GenerateSeed returns a cryptographically secure random seed that can be used
