@@ -324,13 +324,7 @@ type AddressScriptHash struct {
 
 // NewAddressScriptHash returns a new AddressScriptHash.
 func NewAddressScriptHash(serializedScript []byte, net *chaincfg.Params) (*AddressScriptHash, error) {
-	var scriptHash []byte
-	switch net.Base58CksumHasher {
-	case base58.Blake256D:
-		scriptHash = BlakeHash160(serializedScript)
-	default:
-		scriptHash = Hash160(serializedScript)
-	}
+	scriptHash := CksumHashGen(net.Base58CksumHasher, serializedScript)
 	return newAddressScriptHashFromHash(scriptHash, net.ScriptHashAddrID, net.Base58CksumHasher)
 }
 
@@ -474,7 +468,8 @@ func (a *AddressPubKey) serialize() []byte {
 //
 // Part of the Address interface.
 func (a *AddressPubKey) EncodeAddress() string {
-	return encodeAddress(Hash160(a.serialize()), a.pubKeyHashID, a.cksumHasher)
+	hash := CksumHashGen(a.cksumHasher, a.serialize())
+	return encodeAddress(hash, a.pubKeyHashID, a.cksumHasher)
 }
 
 // ScriptAddress returns the bytes to be included in a txout script to pay
@@ -515,8 +510,13 @@ func (a *AddressPubKey) SetFormat(pkFormat PubKeyFormat) {
 // differs with the format.  At the time of this writing, most Bitcoin addresses
 // are pay-to-pubkey-hash constructed from the uncompressed public key.
 func (a *AddressPubKey) AddressPubKeyHash() *AddressPubKeyHash {
-	addr := &AddressPubKeyHash{netID: a.pubKeyHashID}
-	copy(addr.hash[:], Hash160(a.serialize()))
+	addr := &AddressPubKeyHash{
+		netID:       a.pubKeyHashID,
+		cksumHasher: a.cksumHasher,
+	}
+
+	hash := CksumHashGen(a.cksumHasher, a.serialize())
+	copy(addr.hash[:], hash)
 	return addr
 }
 
