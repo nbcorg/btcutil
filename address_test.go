@@ -8,10 +8,11 @@ import (
 	"bytes"
 	"encoding/hex"
 	"fmt"
-	"github.com/martinboehm/btcd/wire"
 	"reflect"
 	"strings"
 	"testing"
+
+	"github.com/martinboehm/btcd/wire"
 
 	"github.com/martinboehm/btcutil"
 	"github.com/martinboehm/btcutil/chaincfg"
@@ -145,6 +146,24 @@ func TestAddresses(t *testing.T) {
 				pkHash := []byte{
 					0x57, 0x63, 0x01, 0x15, 0x30, 0x0a, 0x62, 0x5f, 0x5d, 0xea,
 					0xab, 0x64, 0x10, 0x0f, 0xaa, 0x55, 0x06, 0xc1, 0x42, 0x2f}
+				return btcutil.NewAddressPubKeyHash(pkHash, &customParams)
+			},
+			net: &customParams,
+		},
+		{
+			name:    "litecoin p2pkh with ltc1 prefix not containing any other character 1",
+			addr:    "LTC1f9gtb7bU6B4VjHXvPGDi8ACNZhkKPo",
+			encoded: "LTC1f9gtb7bU6B4VjHXvPGDi8ACNZhkKPo",
+			valid:   true,
+			result: btcutil.TstAddressPubKeyHash(
+				[ripemd160.Size]byte{
+					0x57, 0x63, 0x02, 0x3d, 0x3f, 0x02, 0x50, 0x96, 0x44, 0xda,
+					0xcb, 0xfc, 0x45, 0xf2, 0xc9, 0x10, 0x21, 0x29, 0x74, 0x97},
+				[]byte{LitecoinParams.PubKeyHashAddrID}),
+			f: func() (btcutil.Address, error) {
+				pkHash := []byte{
+					0x57, 0x63, 0x02, 0x3d, 0x3f, 0x02, 0x50, 0x96, 0x44, 0xda,
+					0xcb, 0xfc, 0x45, 0xf2, 0xc9, 0x10, 0x21, 0x29, 0x74, 0x97}
 				return btcutil.NewAddressPubKeyHash(pkHash, &customParams)
 			},
 			net: &customParams,
