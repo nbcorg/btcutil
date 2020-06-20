@@ -12,7 +12,6 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/nbcorg/btcd/btcec"
 	"github.com/nbcorg/btcutil/base58"
 	"github.com/nbcorg/btcutil/bech32"
 	"github.com/nbcorg/btcutil/chaincfg"
