@@ -428,7 +428,7 @@ func NewAddressPubKey(serializedPubKey []byte, net *chaincfg.Params) (*AddressPu
 	}
 
 	// Remember public key
-	pubKey = serializedPubKey
+	pubKey := serializedPubKey
 
 	// Set the format of the pubkey. Always compressed.
 	pkFormat := PKFCompressed
@@ -448,7 +448,7 @@ func NewAddressPubKey(serializedPubKey []byte, net *chaincfg.Params) (*AddressPu
 // format associated with the address.
 func (a *AddressPubKey) serialize() []byte {
 	// Do nothing, just return the kept buffer
-	return pubKey
+	return a.pubKey
 }
 
 // EncodeAddress returns the string encoding of the public key as a
