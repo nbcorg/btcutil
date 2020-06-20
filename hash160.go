@@ -6,7 +6,7 @@ package btcutil
 
 import (
 	"crypto/sha256"
-	"crypto/sha3"
+	"golang.org/x/crypto/sha3"
 	"hash"
 
 	"github.com/dchest/blake256"
