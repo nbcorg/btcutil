@@ -6,7 +6,6 @@ package txscript
 
 import (
 	"bytes"
-	"crypto/sha256"
 	"golang.org/x/crypto/sha3"
 	"fmt"
 	"math/big"
