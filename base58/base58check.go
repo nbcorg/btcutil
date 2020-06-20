@@ -14,6 +14,7 @@ type CksumHasher int
 // Hash function types for checksum calculation
 const (
 	Keccak256OrSha256D = iota      // Single Sha3-256 for script hash, Double SHA256 for checksum
+	Sha256D
 )
 
 // ErrChecksum indicates that the checksum of a check-encoded string does not verify against
@@ -26,6 +27,7 @@ var ErrInvalidFormat = errors.New("invalid format: version and/or checksum bytes
 // checksum: first four bytes of hash^2
 func checksum(input []byte, hash CksumHasher) (cksum [4]byte) {
 	switch hash {
+	case Sha256D:
 	case Keccak256OrSha256D:
 		h := sha256.Sum256(input)
 		h2 := sha256.Sum256(h[:])
