@@ -8,10 +8,10 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/martinboehm/btcd/btcec"
-	"github.com/martinboehm/btcutil/chaincfg"
-	"github.com/martinboehm/btcd/wire"
-	"github.com/martinboehm/btcutil"
+	"github.com/nbcorg/btcd/btcec"
+	"github.com/nbcorg/btcutil/chaincfg"
+	"github.com/nbcorg/btcd/wire"
+	"github.com/nbcorg/btcutil"
 )
 
 // RawTxInWitnessSignature returns the serialized ECDA signature for the input

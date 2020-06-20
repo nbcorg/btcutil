@@ -12,10 +12,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/martinboehm/btcd/wire"
+	"github.com/nbcorg/btcd/wire"
 
-	"github.com/martinboehm/btcutil"
-	"github.com/martinboehm/btcutil/chaincfg"
+	"github.com/nbcorg/btcutil"
+	"github.com/nbcorg/btcutil/chaincfg"
 	"golang.org/x/crypto/ripemd160"
 )
 

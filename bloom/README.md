@@ -1,9 +1,9 @@
 bloom
 =====
 
-[![Build Status](http://img.shields.io/travis/martinboehm/btcutil.svg)](https://travis-ci.org/martinboehm/btcutil)
+[![Build Status](http://img.shields.io/travis/nbcorg/btcutil.svg)](https://travis-ci.org/nbcorg/btcutil)
 [![ISC License](http://img.shields.io/badge/license-ISC-blue.svg)](http://copyfree.org)
-[![GoDoc](http://img.shields.io/badge/godoc-reference-blue.svg)](http://godoc.org/github.com/martinboehm/btcutil/bloom)
+[![GoDoc](http://img.shields.io/badge/godoc-reference-blue.svg)](http://godoc.org/github.com/nbcorg/btcutil/bloom)
 
 Package bloom provides an API for dealing with bitcoin-specific bloom filters.
 
@@ -15,12 +15,12 @@ report.
 ## Installation and Updating
 
 ```bash
-$ go get -u github.com/martinboehm/btcutil/bloom
+$ go get -u github.com/nbcorg/btcutil/bloom
 ```
 
 ## Examples
 
-* [NewFilter Example](http://godoc.org/github.com/martinboehm/btcutil/bloom#example-NewFilter)
+* [NewFilter Example](http://godoc.org/github.com/nbcorg/btcutil/bloom#example-NewFilter)
   Demonstrates how to create a new bloom filter, add a transaction hash to it,
   and check if the filter matches the transaction.
 

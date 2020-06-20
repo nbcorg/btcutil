@@ -25,8 +25,8 @@
 //          "fmt"
 //          "log"
 //
-//          "github.com/martinboehm/btcutil"
-//          "github.com/martinboehm/btcutil/chaincfg"
+//          "github.com/nbcorg/btcutil"
+//          "github.com/nbcorg/btcutil/chaincfg"
 //  )
 //
 //  var testnet = flag.Bool("testnet", false, "operate on the testnet Bitcoin network")

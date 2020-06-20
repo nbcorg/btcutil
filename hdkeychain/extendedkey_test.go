@@ -16,8 +16,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/martinboehm/btcutil/base58"
-	"github.com/martinboehm/btcutil/chaincfg"
+	"github.com/nbcorg/btcutil/base58"
+	"github.com/nbcorg/btcutil/chaincfg"
 )
 
 // TestBIP0032Vectors tests the vectors provided by [BIP32] to ensure the

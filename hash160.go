@@ -9,7 +9,7 @@ import (
 	"hash"
 
 	"github.com/dchest/blake256"
-	"github.com/martinboehm/btcutil/base58"
+	"github.com/nbcorg/btcutil/base58"
 	"golang.org/x/crypto/ripemd160"
 )
 

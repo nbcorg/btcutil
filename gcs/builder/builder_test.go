@@ -9,13 +9,13 @@ import (
 	"encoding/hex"
 	"testing"
 
-	"github.com/martinboehm/btcd/chaincfg/chainhash"
-	"github.com/martinboehm/btcd/wire"
-	"github.com/martinboehm/btcutil"
-	"github.com/martinboehm/btcutil/chaincfg"
-	"github.com/martinboehm/btcutil/gcs"
-	"github.com/martinboehm/btcutil/gcs/builder"
-	"github.com/martinboehm/btcutil/txscript"
+	"github.com/nbcorg/btcd/chaincfg/chainhash"
+	"github.com/nbcorg/btcd/wire"
+	"github.com/nbcorg/btcutil"
+	"github.com/nbcorg/btcutil/chaincfg"
+	"github.com/nbcorg/btcutil/gcs"
+	"github.com/nbcorg/btcutil/gcs/builder"
+	"github.com/nbcorg/btcutil/txscript"
 )
 
 var (

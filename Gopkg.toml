@@ -27,7 +27,7 @@
 
 [[constraint]]
   branch = "master"
-  name = "github.com/martinboehm/btcd"
+  name = "github.com/nbcorg/btcd"
 
 [[constraint]]
   name = "github.com/davecgh/go-spew"

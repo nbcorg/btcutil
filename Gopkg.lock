@@ -15,7 +15,7 @@
 
 [[projects]]
   branch = "master"
-  name = "github.com/martinboehm/btcd"
+  name = "github.com/nbcorg/btcd"
   packages = ["blockchain","btcec","chaincfg","chaincfg/chainhash","database","txscript","wire"]
   revision = "8e7c0427fee5d4778c5d4eb987150369e3ca1d0e"
 

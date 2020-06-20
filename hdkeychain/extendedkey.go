@@ -18,10 +18,10 @@ import (
 	"fmt"
 	"math/big"
 
-	"github.com/martinboehm/btcd/btcec"
-	"github.com/martinboehm/btcutil"
-	"github.com/martinboehm/btcutil/base58"
-	"github.com/martinboehm/btcutil/chaincfg"
+	"github.com/nbcorg/btcd/btcec"
+	"github.com/nbcorg/btcutil"
+	"github.com/nbcorg/btcutil/base58"
+	"github.com/nbcorg/btcutil/chaincfg"
 )
 
 const (
