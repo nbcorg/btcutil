@@ -7,18 +7,13 @@ package base58
 import (
 	"crypto/sha256"
 	"errors"
-	"github.com/Groestlcoin/go-groestl-hash/groestl"
-	"github.com/dchest/blake256"
 )
 
 type CksumHasher int
 
 // Hash function types for checksum calculation
 const (
-	Sha256D     CksumHasher = iota // Double SHA256
-	Keccak256OrSha256D             // Single Sha3-256 for script hash, Double SHA256 for checksum
-	Groestl512D                    // Double Groestl512
-	Blake256D                      // Double Blake256
+	Keccak256OrSha256D = iota      // Single Sha3-256 for script hash, Double SHA256 for checksum
 )
 
 // ErrChecksum indicates that the checksum of a check-encoded string does not verify against
@@ -31,27 +26,10 @@ var ErrInvalidFormat = errors.New("invalid format: version and/or checksum bytes
 // checksum: first four bytes of hash^2
 func checksum(input []byte, hash CksumHasher) (cksum [4]byte) {
 	switch hash {
-	case Sha256D:
 	case Keccak256OrSha256D:
 		h := sha256.Sum256(input)
 		h2 := sha256.Sum256(h[:])
 		copy(cksum[:], h2[:4])
-	case Groestl512D:
-		var h1, h2 [64]byte
-		g := groestl.New()
-		g.Write(input)
-		g.Close(h1[:], 0, 0)
-		g.Write(h1[:])
-		g.Close(h2[:], 0, 0)
-		copy(cksum[:], h2[:4])
-	case Blake256D:
-		h := blake256.New()
-		h.Write(input)
-		intermediateHash := h.Sum(nil)
-		h.Reset()
-		h.Write(intermediateHash)
-		finalHash := h.Sum(nil)
-		copy(cksum[:], finalHash)
 	default:
 		// Should never happen
 		panic("BUG! Not all CksumHasher values are implemented.")
