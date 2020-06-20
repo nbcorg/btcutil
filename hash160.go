@@ -23,6 +23,11 @@ func Keccak256Hash160(buf []byte) []byte {
 	return calcHash(calcHash(buf, sha3.New256()), ripemd160.New())
 }
 
+// Hack
+func Hash160(buf []byte) []byte {
+	return Keccak256Hash160(buf)
+}
+
 // CksumHashGen computes the hash from the passed script based on
 // the passed hasher.
 func CksumHashGen(cksumHasher base58.CksumHasher, script []byte) []byte {
