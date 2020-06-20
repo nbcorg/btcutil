@@ -77,19 +77,6 @@ func TstAddressWitnessScriptHash(version byte, program [32]byte,
 	}
 }
 
-// TstAddressPubKey makes an AddressPubKey, setting the unexported fields with
-// the parameters.
-func TstAddressPubKey(serializedPubKey []byte, pubKeyFormat PubKeyFormat,
-	netID []byte) *AddressPubKey {
-
-	pubKey, _ := btcec.ParsePubKey(serializedPubKey, btcec.S256())
-	return &AddressPubKey{
-		pubKeyFormat: pubKeyFormat,
-		pubKey:       (*btcec.PublicKey)(pubKey),
-		pubKeyHashID: netID,
-	}
-}
-
 // TstAddressSAddr returns the expected script address bytes for
 // P2PKH and P2SH bitcoin addresses.
 func TstAddressSAddr(addr string) []byte {

@@ -408,7 +408,7 @@ const (
 // AddressPubKey is an Address for a pay-to-pubkey transaction.
 type AddressPubKey struct {
 	pubKeyFormat PubKeyFormat
-	pubKey       *btcec.PublicKey
+	pubKey       []byte
 	pubKeyHashID []byte
 	cksumHasher  base58.CksumHasher
 }
@@ -417,22 +417,21 @@ type AddressPubKey struct {
 // address.  The serializedPubKey parameter must be a valid pubkey and can be
 // uncompressed, compressed, or hybrid.
 func NewAddressPubKey(serializedPubKey []byte, net *chaincfg.Params) (*AddressPubKey, error) {
-	pubKey, err := btcec.ParsePubKey(serializedPubKey, btcec.S256())
-	if err != nil {
-		return nil, err
+	// Check public key length
+	if len(serializedPubKey) != 33 {
+		return nil, errors.New("Public key must be 33 bytes long")
 	}
 
-	// Set the format of the pubkey.  This probably should be returned
-	// from btcec, but do it here to avoid API churn.  We already know the
-	// pubkey is valid since it parsed above, so it's safe to simply examine
-	// the leading byte to get the format.
-	pkFormat := PKFUncompressed
-	switch serializedPubKey[0] {
-	case 0x02, 0x03:
-		pkFormat = PKFCompressed
-	case 0x06, 0x07:
-		pkFormat = PKFHybrid
+	// All public keys are starting from 0x03 prefix
+	if serializedPubKey[0] != 0x03 {
+		return nil, errors.New("Invalid public key prefix")
 	}
+
+	// Remember public key
+	pubKey = serializedPubKey
+
+	// Set the format of the pubkey. Always compressed.
+	pkFormat := PKFCompressed
 
 	addr := &AddressPubKey{
 		pubKeyFormat: pkFormat,
@@ -448,18 +447,8 @@ func NewAddressPubKey(serializedPubKey []byte, net *chaincfg.Params) (*AddressPu
 // serialize returns the serialization of the public key according to the
 // format associated with the address.
 func (a *AddressPubKey) serialize() []byte {
-	switch a.pubKeyFormat {
-	default:
-		fallthrough
-	case PKFUncompressed:
-		return a.pubKey.SerializeUncompressed()
-
-	case PKFCompressed:
-		return a.pubKey.SerializeCompressed()
-
-	case PKFHybrid:
-		return a.pubKey.SerializeHybrid()
-	}
+	// Do nothing, just return the kept buffer
+	return pubKey
 }
 
 // EncodeAddress returns the string encoding of the public key as a
@@ -500,10 +489,8 @@ func (a *AddressPubKey) Format() PubKeyFormat {
 	return a.pubKeyFormat
 }
 
-// SetFormat sets the format (uncompressed, compressed, etc) of the
-// pay-to-pubkey address.
+// Does nothing
 func (a *AddressPubKey) SetFormat(pkFormat PubKeyFormat) {
-	a.pubKeyFormat = pkFormat
 }
 
 // AddressPubKeyHash returns the pay-to-pubkey address converted to a
@@ -521,11 +508,6 @@ func (a *AddressPubKey) AddressPubKeyHash() *AddressPubKeyHash {
 	hash := CksumHashGen(a.cksumHasher, a.serialize())
 	copy(addr.hash[:], hash)
 	return addr
-}
-
-// PubKey returns the underlying public key for the address.
-func (a *AddressPubKey) PubKey() *btcec.PublicKey {
-	return a.pubKey
 }
 
 // AddressWitnessPubKeyHash is an Address for a pay-to-witness-pubkey-hash
