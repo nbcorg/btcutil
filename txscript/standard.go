@@ -88,7 +88,8 @@ func (t ScriptClass) String() string {
 func isPubkey(pops []parsedOpcode) bool {
 	// Valid pubkeys are either 33 or 65 bytes.
 	return len(pops) == 2 &&
-		(len(pops[0].data) == 33 || len(pops[0].data) == 65) &&
+		//(len(pops[0].data) == 33 || len(pops[0].data) == 65) &&
+		len(pops[0].data) == 33 &&
 		pops[1].opcode.value == OP_CHECKSIG
 }
 
