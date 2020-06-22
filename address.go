@@ -172,7 +172,7 @@ func DecodeAddress(addr string, defaultNet *chaincfg.Params) (Address, error) {
 
 	// Serialized public keys are either 65 bytes (130 hex chars) if
 	// uncompressed/hybrid or 33 bytes (66 hex chars) if compressed.
-	if len(addr) == 130 || len(addr) == 66 {
+	if /*len(addr) == 130 ||*/ len(addr) == 66 {
 		serializedPubKey, err := hex.DecodeString(addr)
 		if err != nil {
 			return nil, err
