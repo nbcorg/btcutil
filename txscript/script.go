@@ -872,7 +872,7 @@ func ConvertP2PKtoP2PKH(cksumHasher base58.CksumHasher, script []byte) ([]byte, 
 	// uncompressed/hybrid P2PK - PK 0x41 len, 65 bytes PK, 0xac OP_CHECKSIG
 	l := len(script)
 	if l == 35 || l == 67 {
-		if script[l-1] == OP_CHECKSIG && (script[0] == OP_DATA_33 || script[0] == OP_DATA_65) {
+		if script[l-1] == OP_CHECKSIG && (script[0] == OP_DATA_33 /*|| script[0] == OP_DATA_65*/) && script[1] == 0x03 {
 			// compute hash from the public key in the input format
 			pubKey := script[1 : l-1]
 			hash := btcutil.CksumHashGen(cksumHasher, pubKey)

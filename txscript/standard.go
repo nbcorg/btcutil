@@ -89,7 +89,7 @@ func isPubkey(pops []parsedOpcode) bool {
 	// Valid pubkeys are either 33 or 65 bytes.
 	return len(pops) == 2 &&
 		//(len(pops[0].data) == 33 || len(pops[0].data) == 65) &&
-		len(pops[0].data) == 33 &&
+		len(pops[0].data) == 33 && pops[0].data[0] == 0x03 &&
 		pops[1].opcode.value == OP_CHECKSIG
 }
 
@@ -132,7 +132,7 @@ func isMultiSig(pops []parsedOpcode) bool {
 
 	for _, pop := range pops[1 : l-2] {
 		// Valid pubkeys are either 33 or 65 bytes.
-		if len(pop.data) != 33 && len(pop.data) != 65 {
+		if len(pop.data) != 33 || pop.data[0] != 0x03 /* && len(pop.data) != 65 */ {
 			return false
 		}
 	}

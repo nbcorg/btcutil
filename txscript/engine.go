@@ -593,15 +593,16 @@ func (vm *Engine) checkPubKeyEncoding(pubKey []byte) error {
 		return nil
 	}
 
-	if len(pubKey) == 33 && (pubKey[0] == 0x02 || pubKey[0] == 0x03) {
+	if len(pubKey) == 33 && (/*pubKey[0] == 0x02 ||*/ pubKey[0] == 0x03) {
 		// Compressed
 		return nil
 	}
+/*
 	if len(pubKey) == 65 && pubKey[0] == 0x04 {
 		// Uncompressed
 		return nil
 	}
-
+*/
 	return scriptError(ErrPubKeyType, "unsupported public key type")
 }
 
