@@ -27,9 +27,3 @@ func Keccak256Hash160(buf []byte) []byte {
 func Hash160(buf []byte) []byte {
 	return Keccak256Hash160(buf)
 }
-
-// CksumHashGen computes the hash from the passed script based on
-// the passed hasher.
-func CksumHashGen(cksumHasher base58.CksumHasher, script []byte) []byte {
-	return Keccak256Hash160(script)
-}

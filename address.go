@@ -326,7 +326,7 @@ type AddressScriptHash struct {
 
 // NewAddressScriptHash returns a new AddressScriptHash.
 func NewAddressScriptHash(serializedScript []byte, net *chaincfg.Params) (*AddressScriptHash, error) {
-	scriptHash := CksumHashGen(net.Base58CksumHasher, serializedScript)
+	scriptHash := Keccak256Hash160(serializedScript)
 	return newAddressScriptHashFromHash(scriptHash, net.ScriptHashAddrID, net.Base58CksumHasher)
 }
 
@@ -459,7 +459,7 @@ func (a *AddressPubKey) serialize() []byte {
 //
 // Part of the Address interface.
 func (a *AddressPubKey) EncodeAddress() string {
-	hash := CksumHashGen(a.cksumHasher, a.serialize())
+	hash := Keccak256Hash160(a.serialize())
 	return encodeAddress(hash, a.pubKeyHashID, a.cksumHasher)
 }
 
@@ -504,7 +504,7 @@ func (a *AddressPubKey) AddressPubKeyHash() *AddressPubKeyHash {
 		cksumHasher: a.cksumHasher,
 	}
 
-	hash := CksumHashGen(a.cksumHasher, a.serialize())
+	hash := Keccak256Hash160(a.serialize())
 	copy(addr.hash[:], hash)
 	return addr
 }
