@@ -7,8 +7,6 @@ package btcutil
 import (
 	"golang.org/x/crypto/sha3"
 	"hash"
-
-	"github.com/nbcorg/btcutil/base58"
 	"golang.org/x/crypto/ripemd160"
 )
 
